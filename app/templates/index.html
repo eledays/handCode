@@ -4,8 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>handCode</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=send" />
 </head>
 <body>
-    hello, world
+    <canvas></canvas>
+    <button class="sendBtn">
+        <span class="material-symbols-rounded">send</span>
+    </button>
+
+    <script src="{{ url_for('static', filename='js/drawing.js')}}"></script>
 </body>
 </html>
