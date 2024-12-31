@@ -2,9 +2,10 @@ from app import app
 
 import base64
 import io
+import traceback
 
 from flask import render_template, request, jsonify
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageDraw
 import pytesseract
 
 
@@ -29,13 +30,36 @@ def process_image():
 
         image.save('temp.png')
 
-        custom_config = r'--oem 3 --psm 6 -c preserve_interword_spaces=1'
-        text = pytesseract.image_to_string(image, lang='eng', config=custom_config)
+        custom_config = r'--oem 3 --psm 6'
+        boxes = pytesseract.image_to_boxes(image, config=custom_config)
+        print('boxes', boxes)
+
+        img = image.convert('RGB')
+        dr = ImageDraw.Draw(img)
+        lines = {}
+        for i, box in enumerate(boxes.splitlines()):
+            box = box.split()
+            ch, x, y, x1, y1, *_ = box
+            x, y, x1, y1 = map(int, (x, y, x1, y1))
+
+            dr.rectangle((x, y, x1, y1), outline='red', width=3)
+
+            if y not in lines:
+                lines[y] = []
+            lines[y].append((x, ch))
+
+        img.save('temp.png')
+
+        sorted_lines = sorted(lines.items(), reverse=False)
+        text = ''
+        for _, chs in sorted_lines:
+            line = ''.join(ch for _, ch in sorted(chs))
+            text += line + '\n'
 
         with open('temp.txt', 'w') as f:
             f.write(text)
 
         return jsonify({'text': text}), 200
     except Exception as e:
-        print(e)
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
