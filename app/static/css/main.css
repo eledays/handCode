@@ -31,3 +31,8 @@ span {
     vertical-align: middle;
     height: 100%;
 }
+
+.ui .highlight {
+    position: absolute;
+    background-color: #ffff0025;
+}

@@ -1,5 +1,6 @@
 let canvas = document.querySelector('canvas');
 let sendBtn = document.querySelector('.sendBtn');
+let ui = document.querySelector('.ui');
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -18,8 +19,17 @@ function startDrawing(e) {
 function draw(e) {
     if (!isDrawing) return;
 
-    ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 2;
+    e.preventDefault();
+
+    if (e.buttons === 2) {
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 10;
+    }
+    else {
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+    }
+    
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
@@ -66,7 +76,19 @@ function sendImage() {
     })
     .then((response) => response.json())
     .then((data) => {
-        console.log('Распознано:', data.text);
+        console.log(data.text);
+        
+        // ui.innerHTML = '';
+
+        // for (let box of data.boxes) {
+        //     let block = document.createElement('div');
+        //     block.className = 'highlight';
+        //     block.style.left = box[1] + 'px';
+        //     block.style.top = box[2] + 'px';
+        //     block.style.width = box[3] - box[1] + 'px';
+        //     block.style.height = box[4] - box[2] + 'px';
+        //     ui.appendChild(block);
+        // }
     })
     .catch((error) => {
         console.error(error);
