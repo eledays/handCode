@@ -5,6 +5,10 @@
     overflow: hidden;
 }
 
+:root {
+    --thumb-size: 4px;
+}
+
 canvas {
     background-color: #000;
 }
@@ -32,9 +36,59 @@ span {
     height: 100%;
 }
 
-.ui .highlight {
+.colors {
     position: absolute;
-    background-color: #ffff0025;
+    top: 50%;
+    left: 0px;
+    transform: translateY(-50%);
+    height: 100px;
+}
+
+input#brushSize {
+    -webkit-appearance: none;
+    appearance: none;
+    position: absolute;
+    top: 50%;
+    transform: rotate(270deg) translateY(-50%);
+    left: -50px;
+    width: 200px;
+    overflow: visible;
+    border-radius: 5px;
+    background: transparent;
+}
+
+input#brushSize::-webkit-slider-runnable-track {
+    background: #292929;
+    height: 4px;
+    border-radius: 4px;
+}
+
+input#brushSize::-moz-range-track {
+    background: #292929;
+    height: 4px;
+    border-radius: 4px;
+}
+
+input#brushSize::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: var(--thumb-size);
+    height: var(--thumb-size);
+    background: #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    transform: translateY(calc((var(--thumb-size) - 4) / 2));
+}
+
+input#brushSize::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    transform: translateY(-8px);
 }
 
 .scanLine {

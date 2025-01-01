@@ -5,11 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>handCode</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link class="mainStyle" rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=send" />
 </head>
 <body>
-    <div class="ui"></div>
+    <input type="range" min="2" max="100" step="1" value="4" id="brushSize">
+
+    <div class="colors">
+        <button class="white_btn"></button>
+        <button class="black_btn"></button>
+    </div>
+
     <canvas oncontextmenu="return false;"></canvas>
     <button class="sendBtn">
         <span class="material-symbols-rounded">send</span>
@@ -18,5 +24,6 @@
     <textarea name="codePreview" id="codePreview"></textarea>
 
     <script src="{{ url_for('static', filename='js/drawing.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/ui.js')}}"></script>
 </body>
 </html>

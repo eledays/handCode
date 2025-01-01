@@ -1,23 +1,29 @@
-let canvas = document.querySelector('canvas');
-let sendBtn = document.querySelector('.sendBtn');
-let ui = document.querySelector('.ui');
-let codePreview = document.querySelector('#codePreview');
+var canvas = document.querySelector('canvas');
+var sendBtn = document.querySelector('.sendBtn');
+var ui = document.querySelector('.ui');
+var codePreview = document.querySelector('#codePreview');
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let ctx = canvas.getContext('2d');
+var ctx = canvas.getContext('2d');
 
-let isDrawing = false;
-let lastX = 0;
-let lastY = 0;
+var isDrawing = false;
+var lastX = 0;
+var lastY = 0;
 
-let waitingForServer = false;
-let needToUpdate = false;
+var brushSize = 4;
+
+var waitingForServer = false;
+var needToUpdate = false;
+
+var paths = [];
+var undoPaths = [];
 
 function startDrawing(e) {
     isDrawing = true;
     [lastX, lastY] = [e.offsetX, e.offsetY];
+    paths.push([[brushSize, [lastX, lastY]]])
 }
 
 function draw(e) {
@@ -27,13 +33,12 @@ function draw(e) {
 
     if (e.buttons === 2) {
         ctx.strokeStyle = '#000';
-        ctx.lineWidth = 10;
     }
     else {
         ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 2;
     }
     
+    ctx.lineWidth = brushSize;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
@@ -43,6 +48,8 @@ function draw(e) {
     ctx.stroke();
 
     [lastX, lastY] = [e.offsetX, e.offsetY];
+    paths[paths.length - 1][1].push([lastX, lastY]);
+    undoPaths = [];
 
     if (!waitingForServer) sendImage();
     else needToUpdate = true;
@@ -124,4 +131,47 @@ sendBtn.addEventListener('click', () => {
     }, 1000);
 
     sendImage();
+});
+
+window.addEventListener('keydown', (e) => {
+    if (paths && (e.ctrlKey && e.key == 'z')) {
+        
+        poppedPath = paths.pop();
+        if (poppedPath) undoPaths.push(poppedPath);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let size;
+        [size, paths] = paths;
+        for (let path of paths) {
+            ctx.beginPath();
+            ctx.moveTo(path[0][0], path[0][1]);
+            for (let point of path) {
+                ctx.lineTo(point[0], point[1]);
+            }
+            ctx.lineWidth = size;
+            ctx.stroke();
+        }
+
+    }
+    else if (undoPaths && (
+        e.ctrlKey && e.key == 'y' || e.ctrlKey && e.shiftKey && e.key == 'Z')
+    ) {
+
+        poppedPath = undoPaths.pop();
+        if (poppedPath) paths.push(poppedPath);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let size;
+        [size, paths] = paths;
+        for (let path of paths) {
+            ctx.beginPath();
+            ctx.moveTo(path[0][0], path[0][1]);
+            for (let point of path) {
+                ctx.lineTo(point[0], point[1]);
+            }
+            ctx.lineWidth = size;
+            ctx.stroke();
+        }
+
+    }
 });
