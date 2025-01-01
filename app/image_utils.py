@@ -1,4 +1,4 @@
-from app import app
+from app import app, reader
 
 import base64
 import cv2
@@ -22,3 +22,30 @@ def prepare_image(image: np.ndarray) -> str:
     
     cv2.imwrite(f'app/static/user_images/{i}.png', image)
     return f'app/static/user_images/{i}.png'
+
+
+def image_to_code(image: str) -> str:
+    blocks = reader.readtext(image)
+    print(blocks)
+
+    blocks = sorted(blocks, key=lambda x: x[0][0][1])
+
+    tolerance = 20
+
+    last_y = None
+    block_lines = []
+    for block in blocks:
+        if last_y is not None and abs(block[0][0][1] - last_y) <= tolerance:
+            block_lines[-1].append(block)
+        else:
+            block_lines.append([block])
+        last_y = block[0][0][1]
+
+    block_lines = [sorted(e, key=lambda x: x[0][0][0]) for e in block_lines]
+    lines = [' '.join([e[1] for e in line]) for line in block_lines]
+
+    return '\n'.join(lines)
+
+
+if __name__ == '__main__':
+    image_to_code('app/static/user_images/1.png')

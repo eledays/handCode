@@ -1,6 +1,7 @@
 let canvas = document.querySelector('canvas');
 let sendBtn = document.querySelector('.sendBtn');
 let ui = document.querySelector('.ui');
+let codePreview = document.querySelector('#codePreview');
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -10,6 +11,9 @@ let ctx = canvas.getContext('2d');
 let isDrawing = false;
 let lastX = 0;
 let lastY = 0;
+
+let waitingForServer = false;
+let needToUpdate = false;
 
 function startDrawing(e) {
     isDrawing = true;
@@ -39,6 +43,9 @@ function draw(e) {
     ctx.stroke();
 
     [lastX, lastY] = [e.offsetX, e.offsetY];
+
+    if (!waitingForServer) sendImage();
+    else needToUpdate = true;
 }
 
 function stopDrawing(e) {
@@ -65,6 +72,9 @@ function convertTouchEvent(e) {
 }
 
 function sendImage() {
+    if (waitingForServer) return;
+
+    waitingForServer = true;
     const dataURL = canvas.toDataURL('image/png');
 
     fetch('/image', {
@@ -77,6 +87,8 @@ function sendImage() {
     .then((response) => response.json())
     .then((data) => {
         console.log(data.text);
+
+        codePreview.innerText = data.text;
         
         // ui.innerHTML = '';
 
@@ -92,7 +104,24 @@ function sendImage() {
     })
     .catch((error) => {
         console.error(error);
+    })
+    .finally(() => {
+        waitingForServer = false;
+        if (needToUpdate) {
+            needToUpdate = false;
+            sendImage();
+        }
     });
 }
 
-sendBtn.addEventListener('click', sendImage);
+sendBtn.addEventListener('click', () => {
+    let scanLine = document.createElement('div');
+    scanLine.classList.add('scanLine');
+    document.querySelector('body').appendChild(scanLine);
+
+    setTimeout(() => {
+        scanLine.remove();
+    }, 1000);
+
+    sendImage();
+});

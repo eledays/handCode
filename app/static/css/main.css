@@ -36,3 +36,39 @@ span {
     position: absolute;
     background-color: #ffff0025;
 }
+
+.scanLine {
+    position: absolute;
+    top: 0; left: -200px;
+    /* background: linear-gradient(90deg, #ffff0000 40%, #ffffff7a 50%, #ffff0000 60%); */
+    background-color: #ffbb0079;
+    height: 100vh;
+    width: 5px;
+    animation-name: scanLineAnim;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier();
+}
+
+@keyframes scanLineAnim {
+    0% {
+        left: -200px;
+    }
+
+    100% {
+        left: 100vw;
+    }
+}
+
+#codePreview {
+    position: absolute;
+    top: 30vh; right: 50px;
+    height: 40vh; width: 40vh;
+    outline: none;
+    background-color: #0f0f0f;
+    border: none;
+    border-radius: 10px;
+    resize: none;
+    color: white;
+    padding: 20px;
+}

@@ -1,6 +1,4 @@
 .venv
 venv
 __pycache__
-*.png
-*.jpg
-*.jpeg
+/app/static/user_images
