@@ -1,6 +1,5 @@
 var canvas = document.querySelector('canvas');
 var sendBtn = document.querySelector('.sendBtn');
-var ui = document.querySelector('.ui');
 var codePreview = document.querySelector('#codePreview');
 
 canvas.width = window.innerWidth;

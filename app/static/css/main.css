@@ -6,7 +6,8 @@
 }
 
 :root {
-    --thumb-size: 4px;
+    --thumb-size: 15px;
+    --brush-size: 2px;
 }
 
 canvas {
@@ -44,6 +45,14 @@ span {
     height: 100px;
 }
 
+.hoverRangeZone {
+    position: absolute;
+    top: 50%; left: 0px;
+    width: 100px;
+    height: 300px;
+    transform: translateY(-50%);
+}
+
 input#brushSize {
     -webkit-appearance: none;
     appearance: none;
@@ -77,7 +86,8 @@ input#brushSize::-webkit-slider-thumb {
     background: #ffffff;
     border-radius: 50%;
     cursor: pointer;
-    transform: translateY(calc((var(--thumb-size) - 4) / 2));
+    transform: translateY(calc(-.5 * (var(--thumb-size) - 4px)));
+    transition: .5s;
 }
 
 input#brushSize::-moz-range-thumb {
@@ -89,6 +99,17 @@ input#brushSize::-moz-range-thumb {
     border-radius: 50%;
     cursor: pointer;
     transform: translateY(-8px);
+}
+
+.brushPreview {
+    position: absolute;
+    top: 50%; left: 100px;
+    width: var(--brush-size); height: var(--brush-size);
+    border: 2px solid #fff;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 1s;
+    border-radius: 50%;
 }
 
 .scanLine {
