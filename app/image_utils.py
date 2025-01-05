@@ -1,4 +1,8 @@
-from app import app, reader
+try:
+    from app import app, reader
+except ImportError:
+    import easyocr
+    reader = easyocr.Reader(['en'])
 
 import base64
 import cv2
@@ -31,6 +35,7 @@ def image_to_code(image: str) -> str:
     blocks = sorted(blocks, key=lambda x: x[0][0][1])
 
     tolerance = 20
+    symbol_widths = [(block[0][2][0] - block[0][0][0]) / len(block[1]) for block in blocks]
 
     last_y = None
     block_lines = []
@@ -42,10 +47,19 @@ def image_to_code(image: str) -> str:
         last_y = block[0][0][1]
 
     block_lines = [sorted(e, key=lambda x: x[0][0][0]) for e in block_lines]
-    lines = [' '.join([e[1] for e in line]) for line in block_lines]
+    lines = [[line[0][0][:2], ' '.join([e[1] for e in line])] for line in block_lines]
+
+    av_symbol_widths = float(sum(symbol_widths) / len(symbol_widths)) if symbol_widths else 0
+
+    for i, line in enumerate(lines[1:], 1):
+        tabs = (float(line[0][0][0]) - float(lines[0][0][0][0])) // (av_symbol_widths * 3)
+        lines[i][1] = ' ' * (4 * int(tabs)) + line[1]
+
+    lines = [e[1] for e in lines]
 
     return '\n'.join(lines)
 
 
 if __name__ == '__main__':
-    image_to_code('app/static/user_images/1.png')
+    code = image_to_code('images_set/7.png')
+    print(code)

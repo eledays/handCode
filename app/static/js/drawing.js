@@ -24,7 +24,7 @@ var undoPaths = [];
 function startDrawing(e) {
     isDrawing = true;
     [lastX, lastY] = [e.offsetX, e.offsetY];
-    paths.push([[brushSize, [lastX, lastY]]])
+    paths.push([brushSize, color, [[lastX, lastY]]])
 }
 
 function draw(e) {
@@ -44,8 +44,8 @@ function draw(e) {
     ctx.stroke();
 
     [lastX, lastY] = [e.offsetX, e.offsetY];
-    // paths[paths.length - 1][1].push([lastX, lastY]);
-    // undoPaths = [];
+    paths[paths.length - 1][2].push([lastX, lastY]);
+    undoPaths = [];
 
     if (!waitingForServer) sendImage();
     else needToUpdate = true;
@@ -94,19 +94,7 @@ function sendImage() {
     .then((data) => {
         console.log(data.text);
 
-        codePreview.innerText = data.text;
-        
-        // ui.innerHTML = '';
-
-        // for (let box of data.boxes) {
-        //     let block = document.createElement('div');
-        //     block.className = 'highlight';
-        //     block.style.left = box[1] + 'px';
-        //     block.style.top = box[2] + 'px';
-        //     block.style.width = box[3] - box[1] + 'px';
-        //     block.style.height = box[4] - box[2] + 'px';
-        //     ui.appendChild(block);
-        // }
+        codePreview.innerHTML = data.text;
     })
     .catch((error) => {
         console.error(error);
@@ -140,15 +128,18 @@ window.addEventListener('keydown', (e) => {
         if (poppedPath) undoPaths.push(poppedPath);
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        let size;
-        [size, paths] = paths;
         for (let path of paths) {
+            let size, cur_color;
+            [size, cur_color, path] = path;
+            console.log(size, cur_color, path);
+            
             ctx.beginPath();
+            ctx.lineWidth = size;
+            ctx.strokeStyle = cur_color;
             ctx.moveTo(path[0][0], path[0][1]);
             for (let point of path) {
                 ctx.lineTo(point[0], point[1]);
             }
-            ctx.lineWidth = size;
             ctx.stroke();
         }
 
@@ -161,15 +152,16 @@ window.addEventListener('keydown', (e) => {
         if (poppedPath) paths.push(poppedPath);
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        let size;
-        [size, paths] = paths;
         for (let path of paths) {
+            let size, cur_color;
+            [size, cur_color, path] = path;
             ctx.beginPath();
             ctx.moveTo(path[0][0], path[0][1]);
             for (let point of path) {
                 ctx.lineTo(point[0], point[1]);
             }
             ctx.lineWidth = size;
+            ctx.strokeStyle = cur_color;
             ctx.stroke();
         }
 

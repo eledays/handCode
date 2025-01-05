@@ -215,10 +215,6 @@ input#brushSize::-moz-range-thumb {
     color: #000000;
 }
 
-.colors span.active:hover {
-    
-}
-
 .cursor {
     width: var(--brush-size); height: var(--brush-size);
     transform: translate(-50%, -50%);
