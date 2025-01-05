@@ -1,6 +1,7 @@
 var canvas = document.querySelector('canvas');
 var sendBtn = document.querySelector('.sendBtn');
 var codePreview = document.querySelector('#codePreview');
+var loading = document.querySelector('.loading');
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -12,6 +13,7 @@ var lastX = 0;
 var lastY = 0;
 
 var brushSize = 4;
+var color = '#fff'
 
 var waitingForServer = false;
 var needToUpdate = false;
@@ -30,12 +32,7 @@ function draw(e) {
 
     e.preventDefault();
 
-    if (e.buttons === 2) {
-        ctx.strokeStyle = '#000';
-    }
-    else {
-        ctx.strokeStyle = '#fff';
-    }
+    ctx.strokeStyle = color;
     
     ctx.lineWidth = brushSize;
     ctx.lineCap = 'round';
@@ -47,8 +44,8 @@ function draw(e) {
     ctx.stroke();
 
     [lastX, lastY] = [e.offsetX, e.offsetY];
-    paths[paths.length - 1][1].push([lastX, lastY]);
-    undoPaths = [];
+    // paths[paths.length - 1][1].push([lastX, lastY]);
+    // undoPaths = [];
 
     if (!waitingForServer) sendImage();
     else needToUpdate = true;
@@ -78,9 +75,12 @@ function convertTouchEvent(e) {
 }
 
 function sendImage() {
+    console.log('sendImage');
+    
     if (waitingForServer) return;
 
     waitingForServer = true;
+    loading.style.opacity = 1;
     const dataURL = canvas.toDataURL('image/png');
 
     fetch('/image', {
@@ -112,6 +112,7 @@ function sendImage() {
         console.error(error);
     })
     .finally(() => {
+        loading.style.opacity = 0;
         waitingForServer = false;
         if (needToUpdate) {
             needToUpdate = false;

@@ -1,9 +1,15 @@
 var slicer = document.getElementById('brushSize');
 var hoverRangeZone = document.querySelector('.hoverRangeZone');
 var brushPreview = document.querySelector('.brushPreview');
+var body = document.querySelector('body');
+var cursor = document.querySelector('.cursor');
+
+var brushBtn = document.getElementById('brushBtn');
+var eraserBtn = document.getElementById('eraserBtn');
 
 hoverRangeZone.addEventListener('mouseover', () => {
     document.documentElement.style.setProperty('--thumb-size', `25px`);
+    cursor.style.opacity = 0;
 });
 
 hoverRangeZone.addEventListener('mouseout', () => {
@@ -14,6 +20,7 @@ slicer.addEventListener('mouseover', () => {
     document.documentElement.style.setProperty('--thumb-size', `25px`);
     document.documentElement.style.setProperty('--brush-size', `${brushSize}px`);
     brushPreview.style.opacity = 1;
+    cursor.style.opacity = 0;
 });
 
 slicer.addEventListener('mouseout', () => {
@@ -24,4 +31,31 @@ slicer.addEventListener('mouseout', () => {
 slicer.addEventListener('input', () => {
     brushSize = slicer.value;
     document.documentElement.style.setProperty('--brush-size', `${brushSize}px`);
+});
+
+brushBtn.addEventListener('click', () => {
+    color = '#fff';
+    document.documentElement.style.setProperty('--cursor-color', '#fff');
+    brushBtn.classList.add('active');
+    eraserBtn.classList.remove('active');
+});
+
+eraserBtn.addEventListener('click', () => {
+    color = '#000';
+    document.documentElement.style.setProperty('--cursor-color', '#101010');
+    brushBtn.classList.remove('active');
+    eraserBtn.classList.add('active');
+});
+
+body.addEventListener('mouseover', (event) => {
+    cursor.style.opacity = 1;
+});
+
+body.addEventListener('mousemove', (event) => {
+    cursor.style.left = `${event.clientX}px`;
+    cursor.style.top = `${event.clientY}px`;
+});
+
+body.addEventListener('mouseout', () => {
+    cursor.style.opacity = 0;
 });

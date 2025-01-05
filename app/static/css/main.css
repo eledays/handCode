@@ -8,6 +8,11 @@
 :root {
     --thumb-size: 15px;
     --brush-size: 2px;
+    --cursor-color: #fff;
+}
+
+body {
+    cursor: none;
 }
 
 canvas {
@@ -51,6 +56,7 @@ span {
     width: 100px;
     height: 300px;
     transform: translateY(-50%);
+    cursor: pointer;
 }
 
 input#brushSize {
@@ -146,4 +152,78 @@ input#brushSize::-moz-range-thumb {
     resize: none;
     color: white;
     padding: 20px;
+}
+
+.loading {
+    position: absolute;
+    top: calc(70vh - 30px);
+    right: 60px;
+    cursor: default;
+    opacity: 0;
+    transition: 1s;
+}
+
+.loading span {
+    color: #a1a1a1;
+    font-size: 20px;
+    animation-name: loadingAnim;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes loadingAnim {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.colors {
+    position: absolute;
+    top: calc(50vh + 150px); left: 33px;
+    height: max-content;
+}
+
+.colors span {
+    display: block;
+    background-color: transparent;
+    color: #fff;
+    padding: 3px;
+    border-radius: 6px;
+    height: max-content;
+    width: max-content;
+    margin-top: 5px;
+    cursor: pointer;
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+    transition: .5s;
+    user-select: none;
+}
+
+.colors span:hover {
+    background-color: #363636;
+}
+
+.colors span.active {
+    background-color: white;
+    color: #000000;
+}
+
+.colors span.active:hover {
+    
+}
+
+.cursor {
+    width: var(--brush-size); height: var(--brush-size);
+    transform: translate(-50%, -50%);
+    position: fixed;
+    background-color: var(--cursor-color);
+    border-radius: 50%;
+    pointer-events: none;
 }
