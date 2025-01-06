@@ -73,3 +73,32 @@ hideBtn.addEventListener('click', () => {
     }
     hidden = !hidden;
 });
+
+window.addEventListener('keydown', (e) => {
+    if (e.key == ']' || e.key == '}' || e.key == 'ъ' || e.key == 'Ъ') {
+        let step = 1;
+        if (e.shiftKey) step = 10;
+        brushSize = Math.min(Number(slicer.max), brushSize + step);
+        slicer.value = brushSize;
+        document.documentElement.style.setProperty('--brush-size', `${brushSize}px`);
+    }
+    if (e.key == '[' || e.key == '{' || e.key == 'х' || e.key == 'Х') {
+        let step = 1;
+        if (e.shiftKey) step = 10;
+        brushSize = Math.max(Number(slicer.min), brushSize - step);
+        slicer.value = brushSize;
+        document.documentElement.style.setProperty('--brush-size', `${brushSize}px`);
+    }
+    if (e.key == 'p' || e.key == 'з') {
+        color = '#fff';
+        document.documentElement.style.setProperty('--cursor-color', '#fff');
+        brushBtn.classList.add('active');
+        eraserBtn.classList.remove('active');
+    }
+    if (e.key == 'e' || e.key == 'у') {
+        color = '#000';
+        document.documentElement.style.setProperty('--cursor-color', '#101010');
+        brushBtn.classList.remove('active');
+        eraserBtn.classList.add('active');
+    }
+});
