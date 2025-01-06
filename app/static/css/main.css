@@ -141,23 +141,59 @@ input#brushSize::-moz-range-thumb {
     }
 }
 
-#codePreview {
+.codePreviewOuter {
     position: absolute;
-    top: 30vh; right: 50px;
-    height: 40vh; width: 40vh;
+    top: 0; right: 0;
+    height: 100vh; width: 20vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 400px;
+    transition: 1s;
+}
+
+#codePreview {
+    height: 70vh; width: 100%;
     outline: none;
     background-color: #0f0f0f;
     border: none;
-    border-radius: 10px;
+    border-radius: 10px 0 0 10px;
     resize: none;
     color: white;
     padding: 20px;
+    overflow: auto;
+}
+
+.codePreviewOuter #hideBtn {
+    color: #a1a1a1;
+    height: max-content;
+    padding: 7px 2px;
+    cursor: pointer;
+    font-size: 15px;
+    transform: rotateZ(180deg);
+    width: max-content;
+    border-radius: 5px;
+    margin-right: 5px;
+    user-select: none;
+    transition: 1s;
+}
+
+#codePreview::-webkit-scrollbar {
+    width: 5px;
+}
+#codePreview::-webkit-scrollbar-track {
+    background: transparent;
+}
+#codePreview::-webkit-scrollbar-thumb {
+    background-color: #242424;
+    border-radius: 20px;
+    cursor: pointer;
 }
 
 .loading {
     position: absolute;
-    top: calc(70vh - 30px);
-    right: 60px;
+    top: calc(85vh - 40px);
+    right: 20px;
     cursor: default;
     opacity: 0;
     transition: 1s;

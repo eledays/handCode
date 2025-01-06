@@ -3,6 +3,8 @@ var hoverRangeZone = document.querySelector('.hoverRangeZone');
 var brushPreview = document.querySelector('.brushPreview');
 var body = document.querySelector('body');
 var cursor = document.querySelector('.cursor');
+var hideBtn = document.querySelector('.codePreviewOuter #hideBtn');
+var hidden = false;
 
 var brushBtn = document.getElementById('brushBtn');
 var eraserBtn = document.getElementById('eraserBtn');
@@ -58,4 +60,16 @@ body.addEventListener('mousemove', (event) => {
 
 body.addEventListener('mouseout', () => {
     cursor.style.opacity = 0;
+});
+
+hideBtn.addEventListener('click', () => {
+    if (hidden) {
+        document.querySelector('.codePreviewOuter').style.transform = 'translateX(0)';
+        hideBtn.style.transform = 'rotate(180deg)';
+    }
+    else {
+        document.querySelector('.codePreviewOuter').style.transform = 'translateX(92%)';
+        hideBtn.style.transform = 'rotate(0)';
+    }
+    hidden = !hidden;
 });
