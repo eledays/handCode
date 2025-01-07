@@ -21,16 +21,25 @@ var needToUpdate = false;
 var paths = [];
 var undoPaths = [];
 
+var serverAskTimeout = null;
+
 function startDrawing(e) {
     isDrawing = true;
     [lastX, lastY] = [e.offsetX, e.offsetY];
-    paths.push([brushSize, color, [[lastX, lastY]]])
+    paths.push([brushSize, color, [[lastX, lastY]]]);
+
+    clearTimeout(serverAskTimeout);
+    serverAskTimeout = null;
+    needToUpdate = false;
 }
 
 function draw(e) {
     if (!isDrawing) return;
 
-    e.preventDefault();
+    try {
+        e.preventDefault();
+    }
+    catch (e) {}
 
     ctx.strokeStyle = color;
     
@@ -45,15 +54,21 @@ function draw(e) {
 
     [lastX, lastY] = [e.offsetX, e.offsetY];
     paths[paths.length - 1][2].push([lastX, lastY]);
-    undoPaths = [];
-
-    if (!waitingForServer) sendImage();
-    else needToUpdate = true;
+    undoPaths = [];    
 }
 
 function stopDrawing(e) {
     isDrawing = false;
     ctx.closePath();
+
+    clearTimeout(serverAskTimeout);
+
+    if (!waitingForServer) {
+        serverAskTimeout = setTimeout(sendImage, 500);
+    }
+    else {
+        needToUpdate = true;
+    }
 }
 
 canvas.addEventListener('mousedown', startDrawing);
@@ -61,9 +76,20 @@ canvas.addEventListener('mousemove', draw);
 canvas.addEventListener('mouseup', stopDrawing);
 canvas.addEventListener('mouseout', stopDrawing);
 
-canvas.addEventListener('touchstart', (e) => startDrawing(convertTouchEvent(e)));
-canvas.addEventListener('touchmove', (e) => draw(convertTouchEvent(e)));
-canvas.addEventListener('touchend', stopDrawing);
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    startDrawing(convertTouchEvent(e));
+});
+
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    draw(convertTouchEvent(e));
+});
+
+canvas.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    stopDrawing();
+});
 
 function convertTouchEvent(e) {
     const rect = canvas.getBoundingClientRect();

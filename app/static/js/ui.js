@@ -1,22 +1,12 @@
 var slicer = document.getElementById('brushSize');
 var hoverRangeZone = document.querySelector('.hoverRangeZone');
 var brushPreview = document.querySelector('.brushPreview');
-var body = document.querySelector('body');
 var cursor = document.querySelector('.cursor');
 var hideBtn = document.querySelector('.codePreviewOuter #hideBtn');
 var hidden = false;
 
 var brushBtn = document.getElementById('brushBtn');
 var eraserBtn = document.getElementById('eraserBtn');
-
-hoverRangeZone.addEventListener('mouseover', () => {
-    document.documentElement.style.setProperty('--thumb-size', `25px`);
-    cursor.style.opacity = 0;
-});
-
-hoverRangeZone.addEventListener('mouseout', () => {
-    document.documentElement.style.setProperty('--thumb-size', `15px`);
-});
 
 slicer.addEventListener('mouseover', () => {
     document.documentElement.style.setProperty('--thumb-size', `25px`);
@@ -26,7 +16,7 @@ slicer.addEventListener('mouseover', () => {
 });
 
 slicer.addEventListener('mouseout', () => {
-    document.documentElement.style.setProperty('--thumb-size', `${slicer.value}px`);
+    document.documentElement.style.setProperty('--thumb-size', `15px`);
     brushPreview.style.opacity = 0;
 });
 
@@ -49,28 +39,53 @@ eraserBtn.addEventListener('click', () => {
     eraserBtn.classList.add('active');
 });
 
-body.addEventListener('mouseover', (event) => {
+canvas.addEventListener('mouseenter', (event) => {
     cursor.style.opacity = 1;
 });
 
-body.addEventListener('mousemove', (event) => {
+canvas.addEventListener('mouseover', (event) => {
+    cursor.style.opacity = 1;
+});
+
+document.body.addEventListener('mousemove', (event) => {
+    console.log('sdfg');
+    
     cursor.style.left = `${event.clientX}px`;
     cursor.style.top = `${event.clientY}px`;
 });
 
-body.addEventListener('mouseout', () => {
+canvas.addEventListener('mouseout', () => {
     cursor.style.opacity = 0;
 });
 
-hideBtn.addEventListener('click', () => {
-    if (hidden) {
-        document.querySelector('.codePreviewOuter').style.transform = 'translateX(0)';
-        hideBtn.style.transform = 'rotate(180deg)';
+hideBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    let outer = document.querySelector('.codePreviewOuter');
+
+    if (window.innerWidth > 800) {
+        // pc
+        if (hidden) {
+            outer.style.transform = 'translateX(0)';
+            hideBtn.style.transform = 'rotate(180deg)';
+        }
+        else {
+            outer.style.transform = 'translateX(92%)';
+            hideBtn.style.transform = 'rotate(0)';
+        }
     }
     else {
-        document.querySelector('.codePreviewOuter').style.transform = 'translateX(92%)';
-        hideBtn.style.transform = 'rotate(0)';
+        // mobile
+        if (hidden) {
+            outer.style.transform = 'translateY(0)';
+            hideBtn.style.transform = 'rotate(270deg)';
+        }
+        else {
+            outer.style.transform = 'translateY(45%)';
+            hideBtn.style.transform = 'rotate(90deg)';
+        }
     }
+
     hidden = !hidden;
 });
 

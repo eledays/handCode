@@ -13,10 +13,12 @@
 
 body {
     cursor: none;
+    background-color: #242424;
 }
 
 canvas {
     background-color: #000;
+    touch-action: none;
 }
 
 .sendBtn {
@@ -42,12 +44,13 @@ span {
     height: 100%;
 }
 
-.colors {
+.controls {
     position: absolute;
     top: 50%;
     left: 0px;
     transform: translateY(-50%);
     height: 100px;
+    z-index: 10;
 }
 
 .hoverRangeZone {
@@ -56,55 +59,8 @@ span {
     width: 100px;
     height: 300px;
     transform: translateY(-50%);
-    cursor: pointer;
-}
-
-input#brushSize {
-    -webkit-appearance: none;
-    appearance: none;
-    position: absolute;
-    top: 50%;
-    transform: rotate(270deg) translateY(-50%);
-    left: -50px;
-    width: 200px;
-    overflow: visible;
-    border-radius: 5px;
-    background: transparent;
-}
-
-input#brushSize::-webkit-slider-runnable-track {
-    background: #292929;
-    height: 4px;
-    border-radius: 4px;
-}
-
-input#brushSize::-moz-range-track {
-    background: #292929;
-    height: 4px;
-    border-radius: 4px;
-}
-
-input#brushSize::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: var(--thumb-size);
-    height: var(--thumb-size);
-    background: #ffffff;
-    border-radius: 50%;
-    cursor: pointer;
-    transform: translateY(calc(-.5 * (var(--thumb-size) - 4px)));
-    transition: .5s;
-}
-
-input#brushSize::-moz-range-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    background: #ffffff;
-    border-radius: 50%;
-    cursor: pointer;
-    transform: translateY(-8px);
+    cursor: default;
+    z-index: 10;
 }
 
 .brushPreview {
@@ -116,19 +72,7 @@ input#brushSize::-moz-range-thumb {
     opacity: 0;
     transition: opacity 1s;
     border-radius: 50%;
-}
-
-.scanLine {
-    position: absolute;
-    top: 0; left: -200px;
-    /* background: linear-gradient(90deg, #ffff0000 40%, #ffffff7a 50%, #ffff0000 60%); */
-    background-color: #ffbb0079;
-    height: 100vh;
-    width: 5px;
-    animation-name: scanLineAnim;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
-    animation-timing-function: cubic-bezier();
+    z-index: 10;
 }
 
 @keyframes scanLineAnim {
@@ -217,13 +161,92 @@ input#brushSize::-moz-range-thumb {
     }
 }
 
-.colors {
+.controls {
     position: absolute;
-    top: calc(50vh + 150px); left: 33px;
+    top: 50vh; left: 30px;
+    transform: translateY(-50%);
     height: max-content;
+    z-index: 10;
+    overflow: visible;
+    cursor: default;
 }
 
-.colors span {
+.sliderOuter {
+    height: 200px;
+    width: 20px;
+    z-index: 10;
+    overflow: visible;
+    margin: auto;
+    position: relative;
+    margin-bottom: 15px;
+    cursor: default;
+}
+
+input#brushSize {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 200px;
+    transform: rotate(270deg) translate(-50%, -90px);
+    border-radius: 5px;
+    background: transparent;
+    overflow: visible;
+    transform-origin: 50% 50%;
+    outline: none;
+    position: absolute;
+    top: 0; left: 0;
+    z-index: 10;
+}
+
+/* input#brushSize {
+    -webkit-appearance: none;
+    appearance: none;
+    position: absolute;
+    top: 50%;
+    transform: rotate(270deg) translateY(-50%);
+    left: -50px;
+    width: 200px;
+    overflow: visible;
+    border-radius: 5px;
+    background: transparent;
+    z-index: 10;
+} */
+
+input#brushSize::-webkit-slider-runnable-track {
+    background: #292929;
+    height: 4px;
+    border-radius: 4px;
+}
+
+input#brushSize::-moz-range-track {
+    background: #292929;
+    height: 4px;
+    border-radius: 4px;
+}
+
+input#brushSize::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: var(--thumb-size);
+    height: var(--thumb-size);
+    background: #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    transform: translateY(calc(-.5 * (var(--thumb-size) - 4px)));
+    transition: .5s;
+}
+
+input#brushSize::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    transform: translateY(-8px);
+}
+
+.controls span {
     display: block;
     background-color: transparent;
     color: #fff;
@@ -242,11 +265,11 @@ input#brushSize::-moz-range-thumb {
     user-select: none;
 }
 
-.colors span:hover {
+.controls span:hover {
     background-color: #363636;
 }
 
-.colors span.active {
+.controls span.active {
     background-color: white;
     color: #000000;
 }
@@ -258,4 +281,43 @@ input#brushSize::-moz-range-thumb {
     background-color: var(--cursor-color);
     border-radius: 50%;
     pointer-events: none;
+}
+
+@media (max-width: 800px) { 
+
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .codePreviewOuter {
+        position: absolute;
+        top: 50%; left: 0;
+        height: 100%; width: 100vw;
+        display: block;
+    }
+
+    #codePreview {
+        height: 100%; width: 100%;
+        outline: none;
+        z-index: -100;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .codePreviewOuter #hideBtn {
+        width: 100%;
+        transform: rotateZ(270deg);
+    }
+
+    .loading {
+        top: calc(100vh - 15px);
+        right: 15px;
+        transform: translateY(-100%);
+    }
+
+    .controls {
+        top: 30px;
+        transform: none;
+        left: 10px;
+    }
+    
 }

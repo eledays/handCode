@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>handCode</title>
 
     <link class="mainStyle" rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=brush,ink_eraser,send" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=arrow_back_ios_new,brush,ink_eraser,progress_activity,send" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=brush,ink_eraser,send" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=arrow_back_ios_new,brush,ink_eraser,progress_activity,send" />
 </head>
+
 <body>
     <div class="brush">
         <div class="cursor"></div>
 
-        <div class="hoverRangeZone"></div>
+        <!-- <div class="hoverRangeZone"></div> -->
         <div class="brushPreview"></div>
-        <input type="range" min="2" max="100" step="1" value="4" id="brushSize">
 
-        <div class="colors">
+        <div class="controls">
+            <div class="sliderOuter">
+                <input type="range" min="2" max="100" step="1" value="4" id="brushSize">
+            </div>
             <span class="material-symbols-rounded active notranslate" id="brushBtn">brush</span>
             <span class="material-symbols-rounded notranslate" id="eraserBtn">ink_eraser</span>
         </div>
@@ -39,4 +45,5 @@
     <script src="{{ url_for('static', filename='js/drawing.js')}}"></script>
     <script src="{{ url_for('static', filename='js/ui.js')}}"></script>
 </body>
+
 </html>
