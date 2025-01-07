@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
 * {
     padding: 0;
     margin: 0;
@@ -21,20 +23,21 @@ canvas {
     touch-action: none;
 }
 
-.sendBtn {
+.controls {
     position: absolute;
-    color: #bababa;
     top: 20px; right: 20px;
+}
+
+.controls span {
     background-color: transparent;
     border: 2px solid #bababa;
     border-radius: 10px;
     padding: 5px;
     cursor: pointer;
     transition: .3s;
-}
-
-.sendBtn:hover {
-    background-color: #292929;
+    font-size: 22px;
+    color: #bababa;
+    margin-left: 3px;
 }
 
 span {
@@ -44,7 +47,7 @@ span {
     height: 100%;
 }
 
-.controls {
+.brushControls {
     position: absolute;
     top: 50%;
     left: 0px;
@@ -87,17 +90,30 @@ span {
 
 .codePreviewOuter {
     position: absolute;
-    top: 0; right: 0;
-    height: 100vh; width: 20vw;
+    top: 10vh; right: 0;
+    height: max-content; width: 20vw;
     display: flex;
     justify-content: center;
     align-items: center;
     min-width: 400px;
     transition: 1s;
+    touch-action: none;
 }
 
 #codePreview {
-    height: 70vh; width: 100%;
+    height: 40vh; width: 100%;
+    outline: none;
+    background-color: #0f0f0f;
+    border: none;
+    border-radius: 10px 0 0 10px;
+    resize: none;
+    color: white;
+    padding: 20px;
+    overflow: auto;
+}
+
+#codeOutput {
+    height: 40vh; width: 100%;
     outline: none;
     background-color: #0f0f0f;
     border: none;
@@ -122,13 +138,13 @@ span {
     transition: 1s;
 }
 
-#codePreview::-webkit-scrollbar {
+#codePreview::-webkit-scrollbar, #codeOutput::-webkit-scrollbar {
     width: 5px;
 }
-#codePreview::-webkit-scrollbar-track {
+#codePreview::-webkit-scrollbar-track, #codeOutput::-webkit-scrollbar-track {
     background: transparent;
 }
-#codePreview::-webkit-scrollbar-thumb {
+#codePreview::-webkit-scrollbar-thumb, #codeOutput::-webkit-scrollbar-thumb {
     background-color: #242424;
     border-radius: 20px;
     cursor: pointer;
@@ -136,7 +152,7 @@ span {
 
 .loading {
     position: absolute;
-    top: calc(85vh - 40px);
+    top: calc(90vh - 40px);
     right: 20px;
     cursor: default;
     opacity: 0;
@@ -161,7 +177,7 @@ span {
     }
 }
 
-.controls {
+.brushControls {
     position: absolute;
     top: 50vh; left: 30px;
     transform: translateY(-50%);
@@ -246,7 +262,7 @@ input#brushSize::-moz-range-thumb {
     transform: translateY(-8px);
 }
 
-.controls span {
+.brushControls span {
     display: block;
     background-color: transparent;
     color: #fff;
@@ -265,11 +281,11 @@ input#brushSize::-moz-range-thumb {
     user-select: none;
 }
 
-.controls span:hover {
+.brushControls span:hover {
     background-color: #363636;
 }
 
-.controls span.active {
+.brushControls span.active {
     background-color: white;
     color: #000000;
 }
@@ -314,10 +330,28 @@ input#brushSize::-moz-range-thumb {
         transform: translateY(-100%);
     }
 
-    .controls {
+    .brushControls {
         top: 30px;
         transform: none;
         left: 10px;
     }
     
+}
+
+.loading_block {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0; left: 0;
+    background-color: #000000;
+    z-index: 1000;
+    color: #fff;
+}
+
+.loading_block p {
+    font-family: 'Manrope', sans-serif;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: normal;
 }

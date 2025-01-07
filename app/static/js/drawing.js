@@ -12,14 +12,32 @@ var isDrawing = false;
 var lastX = 0;
 var lastY = 0;
 
-var brushSize = 4;
+var brushSize = 2;
 var color = '#fff'
 
 var waitingForServer = false;
 var needToUpdate = false;
 
-var paths = [];
-var undoPaths = [];
+var paths = localStorage.getItem('paths');
+var undoPaths = localStorage.getItem('undoPaths');
+
+paths = paths ? JSON.parse(paths) : [];
+undoPaths = undoPaths ? JSON.parse(undoPaths) : [];
+
+for (let path of paths) {
+    let size, cur_color;
+    [size, cur_color, path] = path;
+    console.log(size, cur_color, path);
+    
+    ctx.beginPath();
+    ctx.lineWidth = size;
+    ctx.strokeStyle = cur_color;
+    ctx.moveTo(path[0][0], path[0][1]);
+    for (let point of path) {
+        ctx.lineTo(point[0], point[1]);
+    }
+    ctx.stroke();
+}
 
 var serverAskTimeout = null;
 
@@ -35,6 +53,8 @@ function startDrawing(e) {
 
 function draw(e) {
     if (!isDrawing) return;
+
+    serverAskTimeout = null;
 
     try {
         e.preventDefault();
@@ -58,6 +78,8 @@ function draw(e) {
 }
 
 function stopDrawing(e) {
+    if (!isDrawing) return;
+
     isDrawing = false;
     ctx.closePath();
 
@@ -130,25 +152,27 @@ function sendImage() {
         waitingForServer = false;
         if (needToUpdate) {
             needToUpdate = false;
-            sendImage();
+            serverAskTimeout = setTimeout(sendImage, 500);
         }
     });
 }
 
-sendBtn.addEventListener('click', () => {
-    let scanLine = document.createElement('div');
-    scanLine.classList.add('scanLine');
-    document.querySelector('body').appendChild(scanLine);
+// sendBtn.addEventListener('click', () => {
+//     let scanLine = document.createElement('div');
+//     scanLine.classList.add('scanLine');
+//     document.querySelector('body').appendChild(scanLine);
 
-    setTimeout(() => {
-        scanLine.remove();
-    }, 1000);
+//     setTimeout(() => {
+//         scanLine.remove();
+//     }, 1000);
 
-    sendImage();
-});
+//     sendImage();
+// });
 
 window.addEventListener('keydown', (e) => {
     if (paths && (e.ctrlKey && e.key == 'z')) {
+        console.log('undo');
+        
         
         poppedPath = paths.pop();
         if (poppedPath) undoPaths.push(poppedPath);
@@ -193,3 +217,8 @@ window.addEventListener('keydown', (e) => {
 
     }
 });
+
+setInterval(() => {
+    localStorage.setItem('paths', JSON.stringify(paths));
+    localStorage.setItem('undoPaths', JSON.stringify(undoPaths));
+}, 100);

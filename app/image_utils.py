@@ -60,6 +60,16 @@ def image_to_code(image: str) -> str:
     return '\n'.join(lines)
 
 
+def prepare_text(text: str) -> str:
+    BUILTINS = ['print', 'input', 'import', 'int', 'float', 'list', 'tuple', 'set', 'dict', 'def', 'return', 'bool', 'bytes', 'str']
+    
+    for word in BUILTINS:
+        if word in text.lower():
+            text = text[:text.lower().find(word)] + word + text[text.lower().find(word) + len(word):]
+
+    return text
+
+
 if __name__ == '__main__':
-    code = image_to_code('images_set/7.png')
-    print(code)
+    print(prepare_text('''dEFgreeto:
+    Print()'''))
