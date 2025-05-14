@@ -142,7 +142,7 @@ function sendImage() {
     .then((data) => {
         console.log(data.text);
 
-        codePreview.innerHTML = data.text;
+        codePreview.textContent = data.text;
     })
     .catch((error) => {
         console.error(error);
